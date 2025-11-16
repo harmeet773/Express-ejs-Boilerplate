@@ -1,37 +1,25 @@
-/* CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(100) UNIQUE,
-    password VARCHAR(255)
-);
- as users*/ 
-
-
-
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
-require("./db.js"); // load passport config
+const { runSql } = require("./db");
 
+// LOCAL STRATEGY
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      // FETCH USER FROM DB
-      const [rows] = await pool.query(
+      const { success, result } = await runSql(
         "SELECT * FROM users WHERE username = ?",
         [username]
       );
 
-      if (rows.length === 0) {
+      if (!success || result.length === 0)
         return done(null, false, { message: "User not found" });
-      }
 
-      const user = rows[0];
+      const user = result[0];
 
-      // Compare password
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
+      if (!isMatch)
         return done(null, false, { message: "Incorrect password" });
-      }
 
       return done(null, user);
     } catch (err) {
@@ -40,17 +28,19 @@ passport.use(
   })
 );
 
-// Serialize user
+// serialize → store user.id in session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-// Deserialize user
+// deserialize → fetch user by id
 passport.deserializeUser(async (id, done) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
-    done(null, rows[0]);
+    const { result } = await runSql("SELECT * FROM users WHERE id = ?", [id]);
+    done(null, result[0]);
   } catch (err) {
     done(err);
   }
 });
+
+module.exports = passport;
