@@ -1,0 +1,15 @@
+PORT=10000
+DB_HOST=localhost
+DB_NAME=
+DB_USER=
+DB_PASS=
+DB_PORT=
+DB_DIALECT=
+SECRET_KEY=ThisIsMy
+YT_API_KEY=
+YT_oauth_client_id=
+YT_oauth_secret_key=
+YT_VIDEO_ID=
+
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=

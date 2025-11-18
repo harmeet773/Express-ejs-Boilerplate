@@ -13,7 +13,7 @@ const sequelize = new Sequelize(
 );
 
 async function runSql(sql, params = []) {
-  try {
+  try {  
     const [result] = await sequelize.query(sql, {
       replacements: params,
     });

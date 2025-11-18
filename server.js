@@ -3,11 +3,24 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const path = require("path");
+const expressLayouts = require('express-ejs-layouts');
 
-require("./config/passport");      // <-- loads our raw SQL passport config
-require("./config/initTables");    // <-- creates MySQL tables from code
+require("./config/passport");
+require("./config/initTables");
 
 const app = express();
+
+// =============================
+// View engine (MUST be before layouts usage)
+// =============================
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+
+// =============================
+// Enable express-ejs-layouts (MUST be BEFORE static + routes)
+// =============================
+app.use(expressLayouts);
+app.set("layout", "layout"); // views/layout.ejs
 
 // =============================
 // Session middleware
@@ -33,24 +46,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // =============================
-// Static assets
+// Static assets (AFTER expressLayouts!!)
 // =============================
 app.use(express.static(path.join(__dirname, "public")));
-
-// =============================
-// View engine
-// =============================
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
 
 // =============================
 // Routes
 // =============================
 const homeRoutes = require("./routes/homeRoutes");
-
-
 app.use("/", homeRoutes);
-
 
 // =============================
 // 404 handler

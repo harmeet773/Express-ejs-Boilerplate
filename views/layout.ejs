@@ -1,26 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <!-- <%= %> escapes HTML, so it’s used for text only, not HTML markup. -->
-   <!-- <%- %> renders the content directly, without escaping HTML. -->
-   <title><%= title %></title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title><%= typeof title !== 'undefined' ? title + ' — MyApp' : 'MyApp' %></title>
 
-  <!-- Bootstrap CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-
-
+<!-- Per-page head additions -->
+<% if (typeof head !== 'undefined') { %>
+<%- head %>
+<% } %>
 </head>
-<body>
+<body>   
 
-  <nav class="navbar navbar-dark bg-dark mb-4 p-3">
-    <a class="navbar-brand" href="/">MyApp</a>
-  </nav>
 
-  <div class="container">
-    <%- body %>
-  </div>
+<!-- header / navbar partial -->
+<%- include('partials/header') %>
 
+
+<main class="container py-4">
+<!-- The page content will be injected here by express-ejs-layouts as <%- body %> -->
+<%- body %>
+</main>
+
+
+<!-- footer partial -->
+<%- include('partials/footer') %>
+
+
+<!-- Bootstrap CSS CDN -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+
+
+<!-- Per-page scripts -->
+<% if (typeof scripts !== 'undefined') { %>
+<%- scripts %>
+<% } %>
 </body>
 </html>
